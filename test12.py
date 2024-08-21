@@ -48,6 +48,9 @@ def check_for_updates():
                     if parsed_version > version.parse(CURRENT_VERSION):
                         print(f"Update available: {latest_version}")
                         assets = latest_release.get('assets', [])
+                        print(f"Found {len(assets)} asset(s).")
+                        for asset in assets:
+                            print(f"Asset: {asset['name']}, URL: {asset['browser_download_url']}")
                         if assets:
                             # Assuming the first asset is the one you want to download
                             asset = assets[0]
