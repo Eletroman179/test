@@ -1,7 +1,7 @@
 import requests
 from packaging import version
 
-CURRENT_VERSION = "1.1.0"  # Your current tool version
+CURRENT_VERSION = "1.2.0"  # Your current tool version
 
 def get_latest_release_info(repo_owner, repo_name):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
