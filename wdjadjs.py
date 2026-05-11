@@ -1,11 +1,28 @@
 import re
 import sys
 import time
-import requests
 import subprocess
 from pathlib import Path
 from datetime import datetime
+
+# ---------------- AUTO INSTALL PYTHON DEPS ----------------
+
+def pip_install(pkg):
+    subprocess.run([sys.executable, "-m", "pip", "install", pkg], check=False)
+
+def ensure_import(pkg_name, pip_name=None):
+    try:
+        __import__(pkg_name)
+    except ImportError:
+        pip_install(pip_name or pkg_name)
+
+ensure_import("flask")
+ensure_import("requests")
+
 from flask import Flask, request
+import requests
+
+# ---------------------------------------------------------
 
 app = Flask(__name__)
 
@@ -51,9 +68,7 @@ def start():
     if not exe:
         print("Installing cloudflared...")
         install("Cloudflare.cloudflared")
-
         time.sleep(5)
-
         exe = find()
 
     if not exe:
@@ -79,10 +94,7 @@ def start():
             if m:
                 return m.group(0)
 
-            if (
-                "failed to unmarshal quick Tunnel" in line
-                or "Internal Server Error" in line
-            ):
+            if "failed to unmarshal quick Tunnel" in line or "Internal Server Error" in line:
                 print("Retrying...")
                 cloudflared.kill()
                 time.sleep(2)
@@ -111,5 +123,5 @@ if __name__ == "__main__":
     else:
         subprocess.Popen(
             [sys.executable, str(Path(__file__)), "--bg"],
-            creationflags=subprocess.CREATE_NO_WINDOW # type: ignore
+            creationflags=subprocess.CREATE_NO_WINDOW  # type: ignore
         )
