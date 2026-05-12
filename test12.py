@@ -1,28 +1,34 @@
-# Source - https://stackoverflow.com/a/71451311
-# Posted by McSebi, modified by community. See post 'Timeline' for change history
-# Retrieved 2026-03-14, License - CC BY-SA 4.0
+import tkinter as tk
+import threading
+import pyttsx3
 
-from ctypes import windll
-from ctypes import c_int
-from ctypes import c_uint
-from ctypes import c_ulong
-from ctypes import POINTER
-from ctypes import byref
 
-nullptr = POINTER(c_int)()
+def speak(text):
+    v = pyttsx3.init()
+    v.say(text)
+    v.runAndWait()
+    v.stop()
 
-windll.ntdll.RtlAdjustPrivilege(
-    c_uint(19),
-    c_uint(1),
-    c_uint(0),
-    byref(c_int())
-)
+def prank():
 
-windll.ntdll.NtRaiseHardError(
-    c_ulong(0xC000007B),
-    c_ulong(0),
-    nullptr,
-    nullptr,
-    c_uint(6),
-    byref(c_uint())
-)
+    text = "Ha ha, you idiot"
+    win = tk.Tk()
+    win.attributes("-fullscreen", True)
+    win.attributes("-topmost", True)
+    win.configure(bg="#1e6ae6")
+
+    label = tk.Label(
+        win,
+        text=text,
+        fg="white",
+        bg="#1e6ae6",
+        font=("Arial", 80)
+    )
+
+    label.pack(expand=True) 
+
+    threading.Thread(target=speak, args=(text,), daemon=True).start()
+
+    win.mainloop()
+
+prank()
