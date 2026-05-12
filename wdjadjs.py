@@ -5,10 +5,8 @@ import shutil
 import subprocess
 from pathlib import Path
 from datetime import datetime
-
 import tkinter as tk
 import threading
-import pyttsx3
 
 # ---------------- AUTO INSTALL PYTHON DEPS ----------------
 
@@ -31,6 +29,7 @@ ensure("pyttsx3")
 
 from flask import Flask, request
 import requests
+import pyttsx3
 
 # ---------------------------------------------------------
 
