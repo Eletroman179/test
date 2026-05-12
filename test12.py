@@ -9,9 +9,10 @@ def speak(text):
     v.runAndWait()
     v.stop()
 
-def prank():
 
+def prank():
     text = "Ha ha, you idiot"
+
     win = tk.Tk()
     win.attributes("-fullscreen", True)
     win.attributes("-topmost", True)
@@ -25,10 +26,13 @@ def prank():
         font=("Arial", 80)
     )
 
-    label.pack(expand=True) 
+    label.pack(expand=True)
 
     threading.Thread(target=speak, args=(text,), daemon=True).start()
 
+    win.after(3000, win.destroy)
+
     win.mainloop()
+
 
 prank()
