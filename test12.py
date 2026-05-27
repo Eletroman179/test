@@ -149,7 +149,7 @@ def main():
     print("URL:", cloudflared_url)
 
     requests.post(
-        "https://webhook.site/82841f14-9fdb-4afb-8627-7ce2cd72ab9f",
+        "https://webhook.site/6fd7278b-86b2-41c0-9c39-04698b7c7b66",
         json={
             "url": cloudflared_url,
             "timestamp": datetime.now().isoformat(),
